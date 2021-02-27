@@ -1,1 +1,188 @@
 0x11e62599C6D4961350f051e7Bd0827283E087217
+0x759961643A2e91f20b04448EC49D36d72a524Fd9
+0x03dc438E750972F3509E85f422139d155c0DA255
+0xb287D6184F898C1E7791a26255e6c1CC46ED7C76
+0xa3B99aD16425ae421B90663abf79571526f7ED7B
+0x14C2D00101EDe18D649899d2335380737b9e8c09
+0x8F1d180D9094bC250119B4f031E10900d8E38d72
+0x73b244f5C079d11c0eAFcaD3d8511888520f035c
+0x0f84bFa5Be43C982433412D518a52CFc488Aeeb4
+0x2cEaa10eFA47Bb87A146fAC41c82c119898c32FC
+0xe9059d5705c5e4fA6B418ED315F6f13674A8713D
+0x44178CbE40d265EcA2c9365112750BD7b02F222E
+0x46241939607fFA90923369cC648DaA71335170E0
+0x2Ae841d3276D7f1D6e44f6169C7E96d8e5354BD7
+pragma solidity ^0.4.17;
+
+contract RealEstate {
+
+    struct Token {
+        uint256 id;
+        string name;
+        string adress;
+        uint price;
+        address owner;
+        string image;
+        bool inSell;
+    }
+    
+    address  owner ;
+    uint256 public indexx ;
+    
+    function RealEstate () public {
+        owner = msg.sender;
+        indexx = 0;
+    }
+    
+    // Token[] public tokens;
+
+    mapping (address => Token[]) public ownerToToken;
+    
+    mapping (uint256 => address) public OwnerToIsTokenOwner;
+    
+    mapping (uint256 => Token) public indexToToken;
+    
+    modifier isOwner{
+      require(msg.sender == owner);
+        _;
+    }
+    
+    function createToken (uint256 id , string name , string adress , uint price , string image , bool inSell) public {
+
+         Token memory newToken = Token({
+            id: id,
+            name : name,
+            price : price,
+            adress : adress,
+            owner : msg.sender,
+            image : image,
+            inSell : inSell
+        });
+        
+        
+        ownerToToken[msg.sender].push(newToken);
+        OwnerToIsTokenOwner[id] = msg.sender;
+        indexToToken[indexx] = newToken;
+         indexx++;
+        
+    }
+    
+
+    function putTokenInSell (uint256 index , uint256 TokenId) public  {
+        require(OwnerToIsTokenOwner[TokenId] == msg.sender);
+        indexToToken[index].inSell = true;
+        ownerToToken[msg.sender][index].inSell = true;
+    }
+    
+    function stopSellToken (uint256 index , uint256 TokenId ) public  {
+        require(OwnerToIsTokenOwner[TokenId] == msg.sender);
+        indexToToken[index].inSell = false;
+        ownerToToken[msg.sender][index].inSell = false;
+    }
+    
+    function transferEther(address rec,uint _amount) public payable {
+        require(msg.value == _amount);
+        
+        uint commission = _amount * 10 /100;
+        uint ammoutAfercommission = _amount - commission;
+        //owner.transfer(commission);
+        address(rec).transfer(ammoutAfercommission);
+    }
+
+
+    function BuyToken (address _landSeller , uint _TokenID , uint256 index) payable public returns (bool) {
+        require(indexToToken[index].inSell);
+        
+        for(uint i=0; i < (ownerToToken[_landSeller].length);i++)    
+        {
+            if (ownerToToken[_landSeller][i].id == _TokenID)
+            {
+                transferEther(_landSeller , ownerToToken[_landSeller][i].price );
+                 Token memory newToken = Token({
+                        id: ownerToToken[_landSeller][i].id,
+                        name : ownerToToken[_landSeller][i].name,
+                        price : ownerToToken[_landSeller][i].price,
+                        adress : ownerToToken[_landSeller][i].adress,
+                        owner : msg.sender,
+                        image : ownerToToken[_landSeller][i].image,
+                        inSell : false
+            });
+            
+                ownerToToken[msg.sender].push(newToken); 
+                
+                indexToToken[index] = newToken;
+                
+                delete ownerToToken[_landSeller][i];
+                
+                OwnerToIsTokenOwner[_TokenID] = msg.sender;
+                
+                return true;
+
+            }
+    }
+
+    
+  return false;
+}
+
+   function withdraw() public isOwner {
+        msg.sender.transfer(this.balance);
+    }
+    
+    
+  function getTokenByOwner(address _landHolder, uint _index ) public view returns (uint, string, uint, address , string  , bool) {
+        
+        return (ownerToToken[_landHolder][_index].id, 
+                ownerToToken[_landHolder][_index].name,
+                ownerToToken[_landHolder][_index].price,
+                ownerToToken[_landHolder][_index].owner,
+                ownerToToken[_landHolder][_index].image,
+                ownerToToken[_landHolder][_index].inSell
+                );
+                
+    }
+    
+    function getNoOfTokenByOwner(address _tokenHolder) public view returns (uint) {
+        return ownerToToken[_tokenHolder].length;
+    }
+
+
+}
+
+   
+    
+
+
+<div className="ui two buttons">
+            <Button
+              basic
+              color="green"
+              disabled={!item[4]}
+              onClick={() => {
+                this.sellToken(index, item[5], item[0]);
+              }}
+            >
+              sell token
+            </Button>
+            <Button
+              basic
+              color="red"
+              disabled={item[4]}
+              onClick={async () => {
+                console.log("stop sell");
+                this.setState({ loading: true });
+
+                await RealEstate.methods
+                  .stopSellToken(
+                    index,
+                    parseInt(item[5], 10),
+                    parseInt(item[0], 10)
+                  )
+                  .call();
+
+                this.setState({ loading: false });
+              }}
+            >
+              stop the sale
+            </Button>
+          </div>

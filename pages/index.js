@@ -2,30 +2,53 @@ import React, { Component } from "react";
 import RealEstate from "../ethereum/RealEstate";
 import { Card, Button, Grid } from "semantic-ui-react";
 import Layout from "../components/Layout";
-
+import { Link } from "../routes";
+import web3 from "../ethereum/web3";
 class RealEstateIndex extends Component {
+  state = {
+    owner: "",
+  };
   static async getInitialProps() {
-    const tokenCount = await RealEstate.methods.getTokensCount().call();
-
+    const tokenCount = await RealEstate.methods.indexx().call();
     const tokens = await Promise.all(
       Array(parseInt(tokenCount))
         .fill()
         .map((element, index) => {
-          return RealEstate.methods.tokens(index).call();
+          return RealEstate.methods.indexToToken(index).call();
         })
     );
 
     return { tokens };
   }
 
+  async componentDidMount() {
+    const accounts = await web3.eth.getAccounts();
+    const owner = accounts[0];
+
+    this.setState({ owner: owner });
+  }
+
   renderTokens() {
-    const tokens = this.props.tokens.map((item) => {
+    const tokens = this.props.tokens.map((item, index) => {
       return {
-        image: "../static/house1.jpg",
-        header: item.name,
-        meta: item.address,
-        description:
-          "Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.",
+        image: `https://ipfs.io/ipfs/${item.image}`,
+        header: `${item.name} add: ${item.owner.slice(0, 5)}`,
+        meta: item.adress,
+        extra: (
+          <div>
+            <a class="ui tag label">{item.price} Wei</a>
+            {item.inSell ? (
+              <a class="ui teal tag label">In Sell</a>
+            ) : (
+              <a class="ui red tag label">Not In sell Yet</a>
+            )}
+          </div>
+        ),
+        description: (
+          <Link route={`/House/${index}`}>
+            <a>view Home</a>
+          </Link>
+        ),
       };
     });
 
@@ -34,8 +57,9 @@ class RealEstateIndex extends Component {
 
   render() {
     console.log("tokens", this.props.tokens);
+    console.log(this.state.owner);
     return (
-      <Layout>
+      <Layout owner={this.state.owner}>
         <div>{this.renderTokens()}</div>
       </Layout>
     );
