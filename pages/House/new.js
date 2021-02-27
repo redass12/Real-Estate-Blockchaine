@@ -67,9 +67,8 @@ class New extends Component {
     };
   };
 
-  inSellHandler = (event: React.FormEvent<HTMLInputElement>, data) => {
-    const value = data.checked;
-    this.setState({ [data.name]: data.checked });
+  inSellHandler = (event, { checked }) => {
+    this.setState({ inSell: checked });
   };
 
   render() {

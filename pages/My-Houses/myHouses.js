@@ -79,7 +79,6 @@ class myHouses extends Component {
       console.log(err);
     }
     this.setState({ loadingInSell: false });
-    Router.push(`/My-Houses/${this.props.owner}`);
   };
 
   stopSellToken = async (index, id1, id2) => {
@@ -95,7 +94,6 @@ class myHouses extends Component {
       console.log(err);
     }
     this.setState({ loadingNotSell: false });
-    Router.push(`/My-Houses/${this.props.owner}`);
   };
 
   render() {
