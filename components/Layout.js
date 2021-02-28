@@ -5,7 +5,7 @@ import Head from "next/head";
 
 export default (props) => {
   return (
-    <Container>
+    <Container style={{ marginTop: "10px" }}>
       <Head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,7 @@ export default (props) => {
           href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
         />
       </Head>
-      <Header owner={props.owner} />
+      <Header owner={props.owner} isContractOwner={props.isContractOwner} />
       {props.children}
     </Container>
   );

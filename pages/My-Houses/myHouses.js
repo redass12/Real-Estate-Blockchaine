@@ -25,15 +25,11 @@ class myHouses extends Component {
     return { tokens, owner };
   }
   renderTokens = () => {
-    const filtredArray = this.props.tokens.filter((item) => {
-      return item[3] !== "";
-    });
-
-    console.log("filtred Array ", filtredArray);
+    console.log("Non filtred array filtred Array ", this.props.tokens);
     //https://ipfs.io/ipfs/0x22059D87851EE41A824FEa59A4336E444679E37a
 
-    const tokens = filtredArray.map((item, index) => {
-      return (
+    const tokens = this.props.tokens.map((item, index) => {
+      return item[3] !== "" ? (
         <Card>
           <Image src={`https://ipfs.io/ipfs/${item[3]}`} wrapped ui={false} />
           <Card.Content>
@@ -46,7 +42,7 @@ class myHouses extends Component {
             </Card.Description>
             <Card.Content extra>
               <Button
-                color="green"
+                color="teal"
                 disabled={item[4]}
                 loading={this.state.loadingInSell}
                 onClick={this.sellToken.bind(null, index, item[5], item[0])}
@@ -64,12 +60,13 @@ class myHouses extends Component {
             </Card.Content>
           </Card.Content>
         </Card>
-      );
+      ) : null;
     });
     return tokens;
   };
 
   sellToken = async (index, id1, id2) => {
+    console.log(index, id1, id2);
     this.setState({ loadingInSell: true });
     try {
       await RealEstate.methods
@@ -82,6 +79,7 @@ class myHouses extends Component {
   };
 
   stopSellToken = async (index, id1, id2) => {
+    console.log(index, id1, id2);
     this.setState({ loadingNotSell: true });
     try {
       console.log("fasdfsadf");
@@ -97,12 +95,11 @@ class myHouses extends Component {
   };
 
   render() {
-    console.log("asfasfasdf", this.props.tokens);
     return (
-      <Layout>
+      <Layout owner={this.props.owner}>
         <div>
           <h3>My Homes </h3>
-          {this.renderTokens()}
+          <Card.Group>{this.renderTokens()}</Card.Group>
         </div>
       </Layout>
     );

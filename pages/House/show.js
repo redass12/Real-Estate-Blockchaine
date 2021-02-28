@@ -36,7 +36,15 @@ class Show extends Component {
     };
   }
 
+  state = {
+    disabled: false,
+    isTokenOwner: this.props.isTokenOwner,
+    inSell: this.props.inSell,
+    loading: false,
+  };
+
   buyToken = async () => {
+    this.setState({ loading: true });
     try {
       const accounts = await web3.eth.getAccounts();
       await RealEstate.methods
@@ -48,21 +56,27 @@ class Show extends Component {
     } catch (err) {
       console.log(err);
     }
+    this.setState({ loading: false });
 
     Router.push("/");
   };
 
+  componentDidMount() {
+    if (this.state.isTokenOwner || !this.state.inSell) {
+      this.setState({ disabled: true });
+    }
+  }
+
   render() {
-    const message1 = this.props.isTokenOwner ? (
-      <Message
-        warning
-        header="You can not Buy your own house"
-        content="Are you crazy??"
-      />
-    ) : null;
-    const message2 = this.props.inSell ? (
+    console.log("isOwner , inSell", this.state.isTokenOwner, this.state.inSell);
+    const inSellMsg = !this.state.inSell ? (
       <Message warning header="This house is not for sell" content="" />
     ) : null;
+    const isTokenOwnerMsg = this.state.isTokenOwner ? (
+      <Message warning header="You can not Buy your own house" />
+    ) : null;
+   
+   
     return (
       <Layout>
         <Grid celled>
@@ -80,16 +94,22 @@ class Show extends Component {
                 <Icon name="ethereum" />
                 Prix : {this.props.price} Wei
               </p>
-
-              {message1}
-              {message2}
+              {inSellMsg}
+              {isTokenOwnerMsg}
               <Button
-                color="green"
-                disabled={this.props.isTokenOwner}
+                loading={this.state.loading}
+                color="teal"
+                icon="cart"
+                disabled={this.state.disabled}
+                label={{
+                  as: "a",
+                  basic: true,
+                  content: "Buy Now",
+                  color: "teal",
+                }}
+                labelPosition="right"
                 onClick={this.buyToken}
-              >
-                Buy
-              </Button>
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

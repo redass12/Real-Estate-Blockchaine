@@ -2,7 +2,7 @@ pragma solidity ^0.4.17;
 
 contract RealEstate {
     
-     address  owner ;
+     address public owner ;
     uint256 public indexx ;
 
     struct Token {
@@ -15,6 +15,8 @@ contract RealEstate {
         bool inSell;
         uint256 index;
     }
+    
+    uint public ContractBalance  = 0;
     
    
     
@@ -75,8 +77,9 @@ contract RealEstate {
         
         uint commission = _amount * 10 /100;
         uint ammoutAfercommission = _amount - commission;
-        //owner.transfer(commission);
+        owner.transfer(commission);
         address(rec).transfer(ammoutAfercommission);
+        ContractBalance+= commission;
     }
 
 
@@ -118,6 +121,7 @@ contract RealEstate {
 
    function withdraw() public isOwner {
         msg.sender.transfer(this.balance);
+        ContractBalance = 0;
     }
     
     
@@ -139,8 +143,4 @@ contract RealEstate {
 
 
 }
-
-   
-    
-
 

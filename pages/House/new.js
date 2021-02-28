@@ -21,7 +21,7 @@ class New extends Component {
     price: "",
     image: "",
     buffer: null,
-    id: Math.floor(Math.random() * 100 + 1),
+    id: Date.now(),
     loading: false,
     inSell: false,
   };

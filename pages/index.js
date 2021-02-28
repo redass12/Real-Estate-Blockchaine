@@ -4,12 +4,15 @@ import { Card, Button, Grid } from "semantic-ui-react";
 import Layout from "../components/Layout";
 import { Link } from "../routes";
 import web3 from "../ethereum/web3";
+import HOC from "../components/Hoc";
 class RealEstateIndex extends Component {
   state = {
     owner: "",
+    isContractOwner: false,
   };
   static async getInitialProps() {
     const tokenCount = await RealEstate.methods.indexx().call();
+    const contractOwner = await RealEstate.methods.owner().call();
     const tokens = await Promise.all(
       Array(parseInt(tokenCount))
         .fill()
@@ -18,14 +21,27 @@ class RealEstateIndex extends Component {
         })
     );
 
-    return { tokens };
+    return { tokens, contractOwner };
   }
 
-  async componentDidMount() {
+  getAccount = async () => {
     const accounts = await web3.eth.getAccounts();
     const owner = accounts[0];
-
+    if (this.props.contractOwner === accounts[0]) {
+      this.setState({ isContractOwner: true });
+    } else {
+      this.setState({ isContractOwner: false });
+    }
     this.setState({ owner: owner });
+  };
+
+  componentDidMount() {
+    if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
+      ethereum.on("accountsChanged", (accounts) => {
+        this.getAccount();
+      });
+    }
+    this.getAccount();
   }
 
   renderTokens() {
@@ -59,11 +75,14 @@ class RealEstateIndex extends Component {
     console.log("tokens", this.props.tokens);
     console.log(this.state.owner);
     return (
-      <Layout owner={this.state.owner}>
+      <Layout
+        owner={this.state.owner}
+        isContractOwner={this.state.isContractOwner}
+      >
         <div>{this.renderTokens()}</div>
       </Layout>
     );
   }
 }
 
-export default RealEstateIndex;
+export default HOC(RealEstateIndex);
