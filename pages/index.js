@@ -52,11 +52,16 @@ class RealEstateIndex extends Component {
         meta: item.adress,
         extra: (
           <div>
-            <a class="ui tag label">{item.price} Wei</a>
+            <a
+              style={{ backgroundColor: "rgba(6,84,113,1", color: "#ffff" }}
+              className="ui tag label"
+            >
+              {item.price} Wei
+            </a>
             {item.inSell ? (
-              <a class="ui teal tag label">In Sell</a>
+              <a className="ui teal tag label">In Sell</a>
             ) : (
-              <a class="ui red tag label">Not In sell Yet</a>
+              <a className="ui red tag label">Not In sell Yet</a>
             )}
           </div>
         ),

@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Icon } from "semantic-ui-react";
 import { Link } from "../routes";
 
 const Header = (props) => {
@@ -11,7 +11,12 @@ const Header = (props) => {
   return (
     <Menu color="grey">
       <Link route="/">
-        <a className="item">HouseBuy&Sell</a>
+        <img
+          style={{ cursor: "pointer" }}
+          src="/logo.png"
+          width="50px"
+          height="50px"
+        />
       </Link>
 
       <Menu.Menu position="right">
@@ -24,7 +29,12 @@ const Header = (props) => {
         </Link>
         {withdrawRoute}
         <Link route="/House/new">
-          <a className="item">+</a>
+          <a
+            style={{ backgroundColor: "rgb(252,179,50)", color: "#ffffff" }}
+            className="item"
+          >
+            <Icon name="plus" size="small" />
+          </a>
         </Link>
       </Menu.Menu>
     </Menu>

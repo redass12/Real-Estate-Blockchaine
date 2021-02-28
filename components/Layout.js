@@ -9,6 +9,7 @@ export default (props) => {
       <Head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" href="/favicon.png" />
         <link
           async
           rel="stylesheet"

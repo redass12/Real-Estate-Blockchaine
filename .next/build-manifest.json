@@ -19,10 +19,20 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/index.js"
     ],
+    "/House/new": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/chunks/pages/House/new.js"
+    ],
     "/House/show": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/chunks/pages/House/show.js"
+    ],
+    "/My-Houses/myHouses": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/chunks/pages/My-Houses/myHouses.js"
     ],
     "/_app": [
       "static/chunks/main.js",
@@ -33,11 +43,6 @@
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
-    ],
-    "/withdraw": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/withdraw.js"
     ]
   },
   "ampFirstPages": []
