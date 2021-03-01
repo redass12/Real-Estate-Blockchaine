@@ -24,16 +24,6 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/House/new.js"
     ],
-    "/House/show": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/House/show.js"
-    ],
-    "/My-Houses/myHouses": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/My-Houses/myHouses.js"
-    ],
     "/_app": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",

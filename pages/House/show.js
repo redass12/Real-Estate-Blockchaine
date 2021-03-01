@@ -4,7 +4,7 @@ import { Grid, Image, Icon, Button, Message } from "semantic-ui-react";
 import RealEstate from "../../ethereum/RealEstate";
 import web3 from "../../ethereum/web3";
 import { Router } from "../../routes";
-
+import Hoc from "../../components/Hoc";
 class Show extends Component {
   static async getInitialProps(props) {
     const index = props.query.index;
@@ -75,8 +75,7 @@ class Show extends Component {
     const isTokenOwnerMsg = this.state.isTokenOwner ? (
       <Message warning header="You can not Buy your own house" />
     ) : null;
-   
-   
+
     return (
       <Layout>
         <Grid celled>
@@ -118,4 +117,4 @@ class Show extends Component {
   }
 }
 
-export default Show;
+export default Hoc(Show);

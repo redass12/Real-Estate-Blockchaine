@@ -24,7 +24,7 @@ const Header = (props) => {
           <a className="item">Home</a>
         </Link>
 
-        <Link route={`/My-Houses/${props.owner}`}>
+        <Link route="/My-Houses/myHouses">
           <a className="item">My Houses</a>
         </Link>
         {withdrawRoute}

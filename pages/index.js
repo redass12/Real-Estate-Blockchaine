@@ -53,7 +53,7 @@ class RealEstateIndex extends Component {
         extra: (
           <div>
             <a
-              style={{ backgroundColor: "rgba(6,84,113,1", color: "#ffff" }}
+              style={{ backgroundColor: "rgba(6,84,113,1)", color: "#ffff" }}
               className="ui tag label"
             >
               {item.price} Wei
@@ -80,14 +80,11 @@ class RealEstateIndex extends Component {
     console.log("tokens", this.props.tokens);
     console.log(this.state.owner);
     return (
-      <Layout
-        owner={this.state.owner}
-        isContractOwner={this.state.isContractOwner}
-      >
+      <Layout isContractOwner={this.state.isContractOwner}>
         <div>{this.renderTokens()}</div>
       </Layout>
     );
   }
 }
 
-export default HOC(RealEstateIndex);
+export default RealEstateIndex;

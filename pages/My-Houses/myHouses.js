@@ -4,6 +4,7 @@ import Layout from "../../components/Layout";
 import RealEstate from "../../ethereum/RealEstate";
 import web3 from "../../ethereum/web3";
 import { Link, Router } from "../../routes";
+import Hoc from "../../components/Hoc";
 
 class myHouses extends Component {
   state = {
@@ -11,7 +12,11 @@ class myHouses extends Component {
     loadingNotSell: false,
   };
   static async getInitialProps(props) {
-    const owner = props.query.address;
+    // const owner = props.query.address;
+    let owner;
+    if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
+      owner = ethereum.selectedAddress;
+    }
     const numberOfTokens = await RealEstate.methods
       .getNoOfTokenByOwner(owner)
       .call();
@@ -95,6 +100,7 @@ class myHouses extends Component {
   };
 
   render() {
+    console.log("reda");
     return (
       <Layout owner={this.props.owner}>
         <div>
@@ -105,4 +111,4 @@ class myHouses extends Component {
     );
   }
 }
-export default myHouses;
+export default Hoc(myHouses);
