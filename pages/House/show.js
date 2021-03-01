@@ -117,4 +117,4 @@ class Show extends Component {
   }
 }
 
-export default Hoc(Show);
+export default Show;

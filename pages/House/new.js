@@ -13,7 +13,6 @@ import web3 from "../../ethereum/web3";
 import nextId from "react-id-generator";
 import ipfs from "../../ethereum/ipfs";
 import { Router } from "../../routes";
-import Hoc from "../../components/Hoc";
 class New extends Component {
   static async getInitialProps() {
     return {};
@@ -141,4 +140,4 @@ class New extends Component {
   }
 }
 
-export default Hoc(New);
+export default New;

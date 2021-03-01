@@ -73,7 +73,7 @@ class RealEstateIndex extends Component {
       };
     });
 
-    return <Card.Group items={tokens} />;
+    return <Card.Group items={tokens} itemsPerRow="4" />;
   }
 
   render() {

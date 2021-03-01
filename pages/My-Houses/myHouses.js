@@ -4,36 +4,50 @@ import Layout from "../../components/Layout";
 import RealEstate from "../../ethereum/RealEstate";
 import web3 from "../../ethereum/web3";
 import { Link, Router } from "../../routes";
-import Hoc from "../../components/Hoc";
 
 class myHouses extends Component {
   state = {
     loadingInSell: false,
     loadingNotSell: false,
+    Token: [],
+    owner: "",
   };
   static async getInitialProps(props) {
+    console.log("dfdfd");
     // const owner = props.query.address;
+
+    return {};
+  }
+
+  async componentDidMount() {
+    console.log("component did mount");
     let owner;
     if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
       owner = ethereum.selectedAddress;
     }
+    this.setState({ owner: owner });
+
     const numberOfTokens = await RealEstate.methods
       .getNoOfTokenByOwner(owner)
       .call();
-    const tokens = await Promise.all(
+
+    const Token = await Promise.all(
       Array(parseInt(numberOfTokens))
         .fill()
         .map((element, index) => {
           return RealEstate.methods.getTokenByOwner(owner, index).call();
         })
     );
-    return { tokens, owner };
+
+    this.setState({ Token: Token });
+
+    console.log("owner : ", owner, "token", Token);
   }
+
   renderTokens = () => {
-    console.log("Non filtred array filtred Array ", this.props.tokens);
     //https://ipfs.io/ipfs/0x22059D87851EE41A824FEa59A4336E444679E37a
 
-    const tokens = this.props.tokens.map((item, index) => {
+    const tokens = this.state.Token.map((item, index) => {
       return item[3] !== "" ? (
         <Card>
           <Image src={`https://ipfs.io/ipfs/${item[3]}`} wrapped ui={false} />
@@ -76,11 +90,12 @@ class myHouses extends Component {
     try {
       await RealEstate.methods
         .putTokenInSell(index, parseInt(id1, 10), parseInt(id2, 10))
-        .send({ from: this.props.owner });
+        .send({ from: this.state.owner });
     } catch (err) {
       console.log(err);
     }
     this.setState({ loadingInSell: false });
+    Router.push("/My-Houses/myHouses");
   };
 
   stopSellToken = async (index, id1, id2) => {
@@ -92,17 +107,18 @@ class myHouses extends Component {
       const accounts = await web3.eth.getAccounts();
       await RealEstate.methods
         .stopSellToken(index, parseInt(id1, 10), parseInt(id2, 10))
-        .send({ from: this.props.owner });
+        .send({ from: this.state.owner });
     } catch (err) {
       console.log(err);
     }
     this.setState({ loadingNotSell: false });
+    Router.push("/My-Houses/myHouses");
   };
 
   render() {
     console.log("reda");
     return (
-      <Layout owner={this.props.owner}>
+      <Layout owner={this.state.owner}>
         <div>
           <h3>My Homes </h3>
           <Card.Group>{this.renderTokens()}</Card.Group>
@@ -111,4 +127,4 @@ class myHouses extends Component {
     );
   }
 }
-export default Hoc(myHouses);
+export default myHouses;
